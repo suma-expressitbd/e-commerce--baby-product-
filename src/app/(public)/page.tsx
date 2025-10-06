@@ -9,6 +9,7 @@ import ClientNewProducts from "@/components/ClientNewProducts";
 import ScrollToTopButton from "@/components/ui/molecules/ScrollToTopButton";
 import DurgaPujaBanner from "@/components/DurgaPujaBanner";
 import DynamicFlashdeal from "@/components/DynamicFlashdeal";
+import BannerSlider from "@/components/BannerSlider";
 
 // Lazy load heavy components to improve initial page load
 const ClientAllProducts = lazy(() => import("@/components/ClientAllProducts"));
@@ -93,7 +94,8 @@ export default async function LandingPage({
 
   return (
     <div>
-      <DurgaPujaBanner />
+      {/* <DurgaPujaBanner /> */}
+      <BannerSlider/>
 
       {/* <HeroSection /> */}
       <ClientNewProducts initialProducts={initialProducts} />

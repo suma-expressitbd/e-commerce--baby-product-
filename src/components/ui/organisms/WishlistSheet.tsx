@@ -212,35 +212,49 @@ export function WishlistSheet() {
             {/* trigger */}
 
 
-            <Button
-                title="Wishlist"
-                variant="ghost"
-                onClick={handleOpen}
+            <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}>
+                <Button
+                    title="Wishlist"
+                    variant="ghost"
+                    onClick={handleOpen}
+                    className=""
+                >
+                    <div className="relative">
+                        <motion.div
+                            animate={bump ? { rotate: [0, -12, 12, 0] } : {}}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <FiHeart className="w-5 h-5  dark:text-white" />
+                        </motion.div>
 
-            >
-                <div className="relative">
-                    <FiHeart className="w-5 h-5 text-pink-600 dark:text-pink-400  " />
+                        {mounted && itemCount > 0 && (
+                            <>
+                                <AnimatePresence>
+                                    <motion.span
+                                        key="badge"
+                                        initial={{ scale: 0, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0, opacity: 0 }}
+                                        className="absolute -top-3 -right-3  bg-violet-600 text-white   text-xs font-normal rounded-full h-5 w-5 flex items-center justify-center shadow ring-2 ring-white dark:ring-gray-800"
+                                    >
+                                        {itemCount > 9 ? "9+" : itemCount}
+                                    </motion.span>
+                                </AnimatePresence>
 
-                    {mounted && itemCount > 0 && (
-                        <>
-                            <AnimatePresence>
-                                <motion.span
-                                    key="badge"
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0, opacity: 0 }}
-                                    className="absolute -top-3 -right-3 md:top-3 bg-[#C43882] md:bg-[#C43882] text-white text-xs font-bold rounded-full  h-6 w-6 md:w-5 md:h-5 flex items-center justify-center  dark:ring-gray-800"
-                                >
-                                    {itemCount > 9 ? "9+" : itemCount}
-                                </motion.span>
-                            </AnimatePresence>
+                                <div className="absolute -top-4 -right-3 w-5 h-5 rounded-full bg-pink-500 animate-ping opacity-60" />
+                            </>
+                        )}
+                    </div>
+                </Button>
 
-                            <div className="absolute -top-3 -right-3 md:top-2 w-5 h-5 rounded-full bg-red-500 animate-ping opacity-60" />
-                        </>
-                    )}
-                </div>
-            </Button>
-
+                  <Link
+      href="/"
+      className=""
+    >
+      
+      {/* <span className=" hidden md:inline text-sm  px-2 text-gray-500  dark:text-white  font-normal">wishlist</span> */}
+    </Link>
+            </motion.div>
 
 
 

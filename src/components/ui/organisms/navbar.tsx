@@ -16,6 +16,7 @@ import { WishlistSheet } from "./WishlistSheet";
 import { AnimatePresence, motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import Image from "next/image";
+import Logo from "../atoms/logo";
 
 export interface NavbarProps {
   className?: string;
@@ -175,232 +176,353 @@ export const Navbar = ({ className, setShowSearch }: NavbarProps) => {
             ? "bg-white border-xl border-gray-200 shadow-sm dark:bg-black dark:border-gray-800 dark:shadow-none dark:text-white"
             : isCategoryPage || isProductsPage
               ? "bg-secondary text-black dark:bg-black dark:text-white"
-              : "bg-tertiary text-black dark:bg-black dark:text-white"
+              : "bg-white text-black dark:bg-black dark:text-white"
           } ${className || ""}`}
       >
-        {/* Mobile Bottom Navigation Bar */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black border-t flex justify-around items-center h-16 shadow-lg">
-          <div className="flex flex-col items-center text-xs ml-4">
-            <SidebarToggler />
-            <span>Menu</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => router.push("/products")}
-            className="flex flex-col items-center text-xs text-black dark:text-white"
-          >
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 16 16"
-              className="text-lg"
-              height="1.5em"
-              width="1.5em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z"></path>
-            </svg>
-            <span className="group-hover:text-default text-xs transition-all duration-500 ease-in-out text-black dark:text-white">
-              Shop
-            </span>
-          </button>
-          <a
-            className="left-1/2 absolute flex justify-center items-center border-2 border-gray-200 bg-gray-100 hover:bg-gray-200 shadow-lg hover:shadow-xl rounded-full w-16 h-16 transform transition -translate-x-1/2 -translate-y-1/2 duration-300 ease-in-out active"
-            href="/"
-            aria-current="page"
-          >
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 576 512"
-              className="group-hover:text-default w-7 h-7 text-default transition duration-200 ease-in-out text-pink-400"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path>
-            </svg>
-          </a>
-          <a className="flex flex-col items-center ml-10 group" href="/about">
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 24 24"
-              className="group-hover:text-default w-7 h-7 transition duration-200 ease-in-out text-black dark:text-white"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M12 11C14.7614 11 17 13.2386 17 16V22H15V16C15 14.4023 13.7511 13.0963 12.1763 13.0051L12 13C10.4023 13 9.09634 14.2489 9.00509 15.8237L9 16V22H7V16C7 13.2386 9.23858 11 12 11ZM5.5 14C5.77885 14 6.05009 14.0326 6.3101 14.0942C6.14202 14.594 6.03873 15.122 6.00896 15.6693L6 16L6.0007 16.0856C5.88757 16.0456 5.76821 16.0187 5.64446 16.0069L5.5 16C4.7203 16 4.07955 16.5949 4.00687 17.3555L4 17.5V22H2V17.5C2 15.567 3.567 14 5.5 14ZM18.5 14C20.433 14 22 15.567 22 17.5V22H20V17.5C20 16.7203 19.4051 16.0796 18.6445 16.0069L18.5 16C18.3248 16 18.1566 16.03 18.0003 16.0852L18 16C18 15.3343 17.8916 14.694 17.6915 14.0956C17.9499 14.0326 18.2211 14 18.5 14ZM5.5 8C6.88071 8 8 9.11929 8 10.5C8 11.8807 6.88071 13 5.5 13C4.11929 13 3 11.8807 3 10.5C3 9.11929 4.11929 8 5.5 8ZM18.5 8C19.8807 8 21 9.11929 21 10.5C21 11.8807 19.8807 13 18.5 13C17.1193 13 16 11.8807 16 10.5C16 9.11929 17.1193 8 18.5 8ZM5.5 10C5.22386 10 5 10.2239 5 10.5C5 10.7761 5.22386 11 5.5 11C5.77614 11 6 10.7761 6 10.5C6 10.2239 6 10 5.5 10ZM18.5 10C18.2239 10 18 10.2239 18 10.5C18 10.7761 18.2239 11 18.5 11C18.7761 11 19 10.7761 19 10.5C19 10.2239 19 10 18.5 10ZM12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2ZM12 4C10.8954 4 10 4.89543 10 6C10 7.10457 10.8954 8 12 8C13.1046 8 14 7.10457 14 6C14 4.89543 13.1046 4 12 4Z"></path>
-            </svg>
-            <span className="group-hover:text-default text-xs transition-all duration-500 ease-in-out text-black dark:text-white">
-              About US
-            </span>
-          </a>
-          <ThemeToggler />
-        </div>
+       
 
-        {/* Desktop Full Header */}
-        <div
-          className={`hidden md:flex items-center justify-between px-6 py-3
-            ${isScrolled ? "text-gray-900" : "text-black dark:text-white"}`}
-        >
-          {/* Left: Menu + Search */}
-          <div className="flex items-center gap-6 text-sm font-semibold ml-16">
-            <div className="flex items-center gap-1 cursor-pointer text-black dark:text-white">
-              <SidebarToggler />
-              <span
-                className="cursor-pointer px-3 py-2"
-                onClick={toggle} // ✅ call toggle from useSidebar hook
-              >
-                Menu
-              </span>
-            </div>
+{/* Mobile Bottom Navigation Bar */}
+{/* <div className="md:hidden flex justify-between items-center px-1 sm:px-2 py-2">
+      <div className="flex justify-between items-center px-4 py-3">
+            {!isDesktop && <SidebarToggler />}
 
-
-
-            {/* Conditionally render the search button */}
-            {!isProductsPage && (
-              <div className="relative" ref={searchRef}>
-                <button
-                  type="button"
-                  onClick={handleSearchClick}
-                  className="flex items-center gap-1 cursor-pointer text-black dark:text-white hover:text-pink-500 dark:hover:text-pink-400 transition-colors"
-                >
-                  <AiOutlineSearch className="text-lg" />
-                  <span>Search</span>
-                </button>
-                <AnimatePresence>
-                  {(showSearchBar || showMobileSearch) && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-12 left-0 z-50 w-[90vw] md:w-[300px] lg:w-[400px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3"
-                    >
-                      <div className="relative">
-                        <AiOutlineSearch className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500 pointer-events-none" />
-                        <input
-                          type="text"
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          onKeyDown={handleSearchKeyDown}
-                          placeholder="Search products..."
-                          className="w-full pl-10 pr-8 py-2 rounded-md bg-gray-50 dark:bg-gray-900 text-black dark:text-white border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                          autoFocus
-                        />
-                        {searchTerm && (
-                          <button
-                            onClick={() => setSearchTerm("")}
-                            className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm"
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </div>
-                      {suggestions.length > 0 && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          transition={{ duration: 0.2 }}
-                          className="mt-2 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700"
-                        >
-                          <ul>
-                            {suggestions.map((item) => (
-                              <li key={`${item.type}-${item.id}`}>
-                                <Link
-                                  href={item.url}
-                                  className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
-                                  onClick={() => {
-                                    setSearchTerm("");
-                                    setShowSearchBar(false);
-                                    setShowMobileSearch(false);
-                                  }}
-                                >
-                                  {item.type === "product" ? (
-                                    <>
-                                      <Image
-                                        src={item.image || DEFAULT_IMAGE}
-                                        alt={item.name}
-                                        width={24}
-                                        height={24}
-                                        className="object-cover rounded"
-                                        unoptimized
-                                      />
-                                      <span className="truncate text-black dark:text-white">{item.name}</span>
-                                      <span className="ml-auto text-gray-500">Product</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <svg
-                                        className="w-5 h-5 text-pink-400"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-                                      </svg>
-                                      <span className="truncate">{item.name}</span>
-                                      <span className="ml-auto text-gray-500">Category</span>
-                                    </>
-                                  )}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-
-          {/* Center: Logo */}
-          <div>
+           <div className="absolute left-1/2 top-1/2 -translate-x-[100%]  -translate-y-1/2">
             <Link href="/">
-              <Image
-                src="/assets/logo.png"
-                alt="G' Lore Logo"
-                width={120}
-                height={48}
-                priority={true}
-                className="h-10 md:h-12 object-contain"
-              />
+              <Logo />
             </Link>
+           </div>
+            
           </div>
-
-          {/* Right: Shop + Cart + Wishlist trigger */}
-          <div className="flex items-center gap-6 text-sm font-semibold">
-            <button
-              type="button"
-              onClick={() => router.push("/products")}
-              className="flex flex-col items-center text-xs text-black dark:text-white"
-            >
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 16 16"
-                className="text-lg text-black dark:text-white"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z"></path>
-              </svg>
-            </button>
+          <div className="flex items-center justify-end space-x-6 text-gray-600 dark:text-gray-300 pr-4 pt-2">
             <CartSheet />
             <WishlistSheet />
             <ThemeToggler />
           </div>
         </div>
+ */}
+
+
+
+
+{/* new mobile view */}
+
+{/* Mobile Layout - Better Solution */}
+<div className="md:hidden">
+  {/* Top Row - Logo, Cart, Wishlist, Theme */}
+  <div className="flex justify-between items-center px-4 py-3">
+    {/* Left - Sidebar Toggler */}
+    <div className="flex items-center w-1/3 justify-start">
+      {!isDesktop && <SidebarToggler />}
+    </div>
+
+    {/* Center - Logo - FLEX SOLUTION */}
+    <div className="flex items-center justify-center w-1/2 mr-8">
+      <Link href="/">
+        <Logo />
+      </Link>
+    </div>
+
+    {/* Right - Icons */}
+    <div className="flex items-center justify-end gap-4 w-1/3">
+      <CartSheet />
+      <WishlistSheet />
+      <ThemeToggler />
+    </div>
+  </div>
+
+  {/* Bottom Row - Search Bar */}
+  <div className="px-4 ">
+    <div className="relative">
+      <AiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg" />
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={handleSearchKeyDown}
+        onFocus={() => setShowSearchBar(true)}
+        placeholder="Search"
+        className="
+          w-full h-11 rounded-full
+          pl-11 pr-4
+          bg-white dark:bg-gray-900
+          border border-gray-200 dark:border-gray-700
+          shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/70
+          text-[14px] text-black dark:text-white
+          placeholder-gray-500
+        "
+      />
+    </div>
+  </div>
+</div>
+
+      
+
+
+            <AnimatePresence>
+        {(showSearchBar || showMobileSearch) && suggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+            className="
+              absolute left-0 z-50 top-[calc(100%+8px)] z-50
+             w-[18rem] lg:w-[22rem] xl:w-[24rem]
+              bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+              rounded-xl shadow-xl p-2
+            "
+          >
+            <ul className="max-h-72 overflow-y-auto divide-y divide-gray-100/60 dark:divide-gray-700/60">
+              {suggestions.map((item) => (
+                <li key={`${item.type}-${item.id}`}>
+                  <Link
+                    href={item.url}
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/40 rounded-md text-sm"
+                    onClick={() => {
+                      setSearchTerm("");
+                      setShowSearchBar(false);
+                      setShowMobileSearch(false);
+                    }}
+                  >
+                    {item.type === "product" ? (
+                      <>
+                        <Image
+                          src={item.image || DEFAULT_IMAGE}
+                          alt={item.name}
+                          width={28}
+                          height={28}
+                          className="object-cover rounded"
+                          unoptimized
+                        />
+                        <span className="truncate text-black dark:text-white">{item.name}</span>
+                        <span className="ml-auto text-gray-500">Product</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="w-5 h-5 text-pink-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                        <span className="truncate text-black dark:text-white">{item.name}</span>
+                        <span className="ml-auto text-gray-500">Category</span>
+                      </>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
+
+
+      
+        {/* Desktop Full Header */}
+      {/* Desktop Full Header */}
+{/* Desktop Full Header */}
+<div className="relative z-50 overflow-visible">
+<div
+  className={`hidden md:grid grid-cols-[auto_1fr_auto] items-center
+    md:px-3 lg:px-6 xl:px-8 md:py-3 lg:py-3
+    w-full
+    overflow-visible       /* ✅ fix added */
+    md:max-w-full lg:max-w-[1140px] xl:max-w-[1320px] 2xl:max-w-[1440px] mx-auto
+    ${isScrolled ? "text-gray-900" : "text-black dark:text-white"}`}
+>
+
+  
+  {/* LEFT: Logo */}
+<div className="flex-shrink-0 md:ml-2 lg:ml-4 xl:ml-6 min-w-[100px]">
+
+    <Link href="/">
+     <Image
+  src="/assets/logo5.png"
+  alt="Logo"
+  width={160}
+  height={60}
+  priority
+  className="h-11 md:h-12 lg:h-14 xl:h-16 object-contain"
+/>
+    </Link>
+  </div>
+
+  {/* CENTER: Main Nav */}
+<nav className="justify-self-center w-full px-2 md:px-4 lg:px-10 xl:pl-24 xl:pr-20 overflow-visible">
+
+    <ul
+      className="
+        flex items-center justify-center
+        md:gap-5 lg:gap-6 xl:gap-7 2xl:gap-8
+        text-[15px] font-semibold
+      "
+    >
+      <li>
+        <Link href="/" className="hover:text-pink-500 transition-colors">
+          Home
+        </Link>
+      </li>
+
+      <li className="flex items-center gap-1">
+        <Link href="/products" className="hover:text-pink-500 transition-colors">
+          Shop
+        </Link>
+        <span className="text-xs opacity-70 md:hidden lg:inline">▾</span>
+      </li>
+
+      
+      <li className="relative">
+        <span className="absolute -top-3 left-1 text-[10px] px-2 py-[2px] rounded-full bg-violet-600 text-white shadow">
+          NEW
+        </span>
+        <Link
+          href="/category/accessories"
+          className="hover:text-pink-500 transition-colors"
+        >
+          Accessories
+        </Link>
+      </li>
+
+      
+    </ul>
+  </nav>
+
+  {/* RIGHT: Cart • Search • Wishlist • Login */}
+  <div
+    className="
+      flex items-center
+      md:gap-4 lg:gap-5 xl:gap-6
+      md:pr-3 lg:pr-6 xl:pr-10
+      justify-self-end
+    "
+  >
+    {/* Cart */}
+    <div className="relative">
+      <CartSheet />
+    </div>
+
+    {/* Search */}
+    <div className="relative" ref={searchRef}>
+      <div className="w-[14rem] lg:w-[18rem] xl:w-[20rem]"> {/* md=56 lg=72 xl=80 */}
+        <div className="relative">
+          <AiOutlineSearch className="absolute left-4 top-1/2  -translate-y-1/2 text-gray-500" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            onFocus={() => setShowSearchBar(true)}
+            placeholder="Search"
+            className="
+              w-full h-11 lg:h-12 rounded-full
+              pl-11 pr-4
+              bg-white dark:bg-gray-900
+              border border-gray-200 dark:border-gray-700
+              shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500/70
+              text-[14px] lg:text-[15px] text-black dark:text-white
+            "
+          />
+        </div>
+      </div>
+
+      {/* Suggestions (width match at xl) */}
+      <AnimatePresence>
+        {(showSearchBar || showMobileSearch) && suggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+            className="
+              absolute left-0 z-50 top-[calc(100%+8px)] z-50
+             w-[18rem] lg:w-[22rem] xl:w-[24rem]
+              bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+              rounded-xl shadow-xl p-2
+            "
+          >
+            <ul className="max-h-72 overflow-y-auto divide-y divide-gray-100/60 dark:divide-gray-700/60">
+              {suggestions.map((item) => (
+                <li key={`${item.type}-${item.id}`}>
+                  <Link
+                    href={item.url}
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/40 rounded-md text-sm"
+                    onClick={() => {
+                      setSearchTerm("");
+                      setShowSearchBar(false);
+                      setShowMobileSearch(false);
+                    }}
+                  >
+                    {item.type === "product" ? (
+                      <>
+                        <Image
+                          src={item.image || DEFAULT_IMAGE}
+                          alt={item.name}
+                          width={28}
+                          height={28}
+                          className="object-cover rounded"
+                          unoptimized
+                        />
+                        <span className="truncate text-black dark:text-white">{item.name}</span>
+                        <span className="ml-auto text-gray-500">Product</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="w-5 h-5 text-pink-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                        <span className="truncate text-black dark:text-white">{item.name}</span>
+                        <span className="ml-auto text-gray-500">Category</span>
+                      </>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+
+    {/* Wishlist */}
+    <WishlistSheet />
+
+    <ThemeToggler />
+    
+
+    {/* Login */}
+    <Link
+      href="/login"
+      className="grid place-items-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+      title="Login"
+      aria-label="Login"
+    >
+      <svg
+        stroke="currentColor"
+        fill="currentColor"
+        strokeWidth="0"
+        viewBox="0 0 24 24"
+        className="w-6 h-6 text-black dark:text-white"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M10 17v-3H3v-4h7V7l5 5-5 5z"></path>
+        <path d="M20 19h-8v-2h8V7h-8V5h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"></path>
+      </svg>
+    </Link>
+  </div>
+</div>
+</div>
+
+
 
         <MenuSidebar />
       </div>

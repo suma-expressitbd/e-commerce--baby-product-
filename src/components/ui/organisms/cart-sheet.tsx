@@ -255,32 +255,51 @@ export function CartSheet() {
   }, [openCart, isOpen]);
 
   const trigger = (
+<Button
+  title="Open Cart"
+  variant="ghost"
+  ref={triggerRef}
+  onMouseDown={(e) => e.stopPropagation()}
+  onClick={(e) => {
+    e.preventDefault();
+    handleOpenCart();
+  }}
+>
+  <div className="relative inline-flex">
+    <FaCartArrowDown className="w-5 h-5 text-gray-700 dark:text-gray-200" />
 
-    <Button
-      title="Open Cart"
-      variant="ghost"
-      ref={triggerRef}
-      onMouseDown={(e) => e.stopPropagation()}
-      onClick={(e) => {
-        e.preventDefault();
-        handleOpenCart();
-      }}
+    {mounted && itemCount > 0 && (
+      <>
+        {/* counter badge — lifted up like wishlist */}
+        <span
+          className="
+            absolute top-0 right-0
+            -translate-y-1/2 translate-x-1/2
+            h-5 w-5 rounded-full
+            bg-violet-600 text-white text-[11px] font-bold
+            flex items-center justify-center
+            ring-2 ring-white dark:ring-gray-900
+            leading-none
+          "
+        >
+          {itemCount > 9 ? "9+" : itemCount}
+        </span>
 
-    >
-      <div className="relative">
-        <FaCartArrowDown className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-        {mounted && itemCount > 0 && (
-          <>
-            <span
-              className="absolute -top-3 -right-3 md:top-3 bg-[#C43882] md:bg-[#C43882] text-white text-xs font-bold rounded-full  h-6 w-6 md:w-5 md:h-5 flex items-center justify-center  dark:ring-gray-800"
-            >
-              {itemCount > 9 ? "9+" : itemCount}
-            </span>
-            <div className="absolute -top-3 -right-3 md:top-2 w-5 h-5 rounded-full bg-red-500 animate-ping opacity-60" />
-          </>
-        )}
-      </div>
-    </Button>
+        {/* ping effect under the badge */}
+        <div
+          className="
+            absolute top-0 right-0
+            -translate-y-1/2 translate-x-1/2
+            h-5 w-5 rounded-full
+            bg-[#C43882] opacity-60
+            animate-ping
+          "
+        />
+      </>
+    )}
+  </div>
+</Button>
+
 
   );
 
