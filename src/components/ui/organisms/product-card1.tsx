@@ -868,7 +868,7 @@ export default function ProductCard({
             <div className="mt-4 md:mt-6 flex flex-col sm:flex-row items-center gap-3">
               <button
                 onClick={handleAddToCart}
-                className="w-full sm:w-auto inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-5 md:px-6 lg:px-7 py-3 text-white text-sm md:text-[15px] font-semibold shadow-[0_14px_30px_rgba(79,70,229,0.35)] hover:bg-indigo-700"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-5 md:px-6 lg:px-7 py-3 text-white text-sm md:text-[15px] font-semibold  hover:bg-indigo-700"
               >
                 Add To Cart +
               </button>

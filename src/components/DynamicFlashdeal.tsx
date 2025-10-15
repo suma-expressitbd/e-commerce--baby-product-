@@ -248,18 +248,25 @@ function FlashDeals({ initialProducts }: FlashDealsProps) {
     modules={[Navigation, Autoplay, FreeMode, Pagination, EffectCoverflow]}
     spaceBetween={50}
     slidesPerView={'auto'}      // ← পরিবর্তন
-    centeredSlides={false}
+    centeredSlides={true}
     navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
     autoplay={!isAutoplayPaused ? { delay: 4000 } : false}
     onSwiper={setSwiper}
     onSlideChange={updateNav}
     className="py-8 overflow-visible h-[720px] md:h-[780px]"
+
+     breakpoints={{
+    1024: {
+      slidesPerView: 'auto',
+      centeredSlides: false,
+    },
+  }}
   >
     {deals.map((deal) => (
      <SwiperSlide
       key={deal._id}
     
-    className="!w-[720px] md:!w-[800px] lg:!w-[800px] !h-full"
+    className="!w-[320px] md:!w-[800px] lg:!w-[800px] !h-full"
     >
   
      <div className="h-full flex">
