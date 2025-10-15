@@ -11,6 +11,7 @@ import { CountdownTimer } from '../../product/_component/CountdownTimer';
 import { FlashDealTimeCounter } from '@/components/ui/atoms/FlashDealTimeCounter';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Pagination } from '@/components/ui/molecules/pagination';
+import ProductCard1 from '@/components/ui/organisms/product-card';
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */

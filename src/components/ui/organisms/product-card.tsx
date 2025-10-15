@@ -1,31 +1,77 @@
+
+
+
 "use client";
 
 import { useRouter } from "next/navigation";
-import Image from "@/components/ui/atoms/image";
 import Link from "next/link";
 import React, { useState, useMemo, useEffect } from "react";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiShoppingCart, FiEye, FiStar } from "react-icons/fi";
 import { toast } from "sonner";
+
+import Image from "@/components/ui/atoms/image";
 import { Product } from "@/types/product";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import { usePreorderCart } from "@/hooks/usePreorderCart";
 import type { TPreorderCartItem } from "@/lib/features/preOrderCartSlice/preOrderCartSlice";
 import VariantSelectModal from "@/app/(public)/product/_component/VariantSelectModal";
-import QuickViewModal from "../molecules/QuickViewModal";
 
+/* --------------------------------- utils --------------------------------- */
+const slugify = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[অ-হ]/g, (c) => {
+      const m: Record<string, string> = {
+        অ: "o",
+        আ: "a",
+        ই: "i",
+        ঈ: "i",
+        উ: "u",
+        ঊ: "u",
+        ঋ: "ri",
+        এ: "e",
+        ঐ: "oi",
+        ও: "o",
+        ঔ: "ou",
+        ক: "k",
+        খ: "kh",
+        গ: "g",
+        ঘ: "gh",
+      };
+      return m[c] || c;
+    })
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const COLOR_MAP: Record<string, string> = {
+  black: "#000000",
+  white: "#ffffff",
+  red: "#ef4444",
+  blue: "#2563eb",
+  green: "#10b981",
+  yellow: "#f59e0b",
+  purple: "#7c3aed",
+  pink: "#ec4899",
+  navy: "#1e2a44",
+  brown: "#8b5e3c",
+  beige: "#e9dcc5",
+};
+
+/* --------------------------------- types --------------------------------- */
 interface ProductCardProps {
   product: Product;
   isAboveFold?: boolean;
 }
 
-export default function ProductCard({
-  product,
-  isAboveFold = false,
-}: ProductCardProps) {
+/* -------------------------------- component ------------------------------- */
+export default function ProductCard1({ product, isAboveFold = false }: ProductCardProps) {
   const router = useRouter();
   const { addItem: addCartItem, openCart, items: cartItems } = useCart();
-  const { addItem: addPreorderItem, item: preorderItem, clearCart: clearPreorderCart } = usePreorderCart();
+  const { addItem: addPreorderItem, item: preorderItem, clearCart: clearPreorderCart } =
+    usePreorderCart();
   const {
     items: wishlistItems,
     addItem: addWishlistItem,
@@ -37,31 +83,29 @@ export default function ProductCard({
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalAction, setModalAction] = useState<"cart" | "wishlist" | null>(null);
-  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
-  const { productLink, variant, priceData, isOutOfStock, isPreOrder } = useMemo(() => {
-    const slugify = (name: string) =>
-      name
-        .toLowerCase()
-        .replace(/[অ-হ]/g, (c) => {
-          const m: Record<string, string> = {
-            অ: "o", আ: "a", ই: "i", ঈ: "i", উ: "u", ঊ: "u", ঋ: "ri",
-            এ: "e", ঐ: "oi", ও: "o", ঔ: "ou", ক: "k", খ: "kh", গ: "g", ঘ: "gh",
-          };
-          return m[c] || c;
-        })
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]+/g, "")
-        .replace(/--+/g, "-")
-        .replace(/^-+|-+$/g, "");
+  const {
+    productLink,
+    variant,
+    priceData,
+    badges,
+    isOutOfStock,
+    isPreOrder,
+    condition,
+    img,
+    blur,
+  } = useMemo(() => {
+    const link = `/product/${slugify(product.name)}?id=${product._id}`;
 
-    const productLink = `/product/${slugify(product.name)}?id=${product._id}`;
     const variant =
       product.variantsId?.find((v) => v.variants_stock > 0) ??
       product.variantsId?.[0] ??
       null;
 
+
+
+
+      
     const sell = variant ? +variant.selling_price : 0;
     const offer = variant ? +variant.offer_price : sell;
     const now = Date.now();
@@ -84,36 +128,63 @@ export default function ProductCard({
       product.isPreOrder ||
       (product.hasVariants ? (variant?.isPreOrder ?? false) : (product.variantsId?.[0]?.isPreOrder ?? false));
 
+    const currentImage = product.images?.[0];
+    const img =
+      currentImage?.alterImage?.secure_url ||
+      currentImage?.image.secure_url ||
+      "/placeholder.png";
+    const blur =
+      currentImage?.image.secure_url?.replace("/upload/", "/upload/e_blur:300/") ||
+      "/placeholder.png";
+
+    const condition = variant?.condition ?? "";
+
     return {
-      productLink,
+      productLink: link,
       variant,
       priceData: { sell, offer, display, pct, isOffer },
+          badges: { condition, hasVariant: product.hasVariants },
       isOutOfStock: outOfStock,
       isPreOrder,
+      condition,
+      img,
+      blur,
     };
   }, [product]);
 
+  /* wishlist state */
   useEffect(() => {
-    if (variant) {
-      const hasVariants = product.hasVariants && product.variantsId.length > 0;
-      const wishlistedId = hasVariants ? variant._id : product._id;
-      setIsWishlisted(wishlistItems.some((item) => item._id === wishlistedId));
-    }
+    if (!variant) return;
+    const hasVariants = product.hasVariants && product.variantsId.length > 0;
+    const wishlistedId = hasVariants ? variant._id : product._id;
+    setIsWishlisted(wishlistItems.some((item) => item._id === wishlistedId));
   }, [wishlistItems, variant, product]);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      const isMobileDevice = window.innerWidth <= 640;
-      setIsMobile(isMobileDevice);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  /* derive size + color chips (best-effort) */
+  const sizes = useMemo(() => {
+    const vals: string[] = [];
+    product?.variantsId?.forEach((v) =>
+      v?.variants_values?.forEach((val) => {
+        if (/^(XS|S|M|L|XL|2XL|3XL|\d{2})$/i.test(val)) vals.push(val.toUpperCase());
+      })
+    );
+    return Array.from(new Set(vals)).slice(0, 3);
+  }, [product]);
 
+  const colors = useMemo(() => {
+    const vals: string[] = [];
+    product?.variantsId?.forEach((v) =>
+      v?.variants_values?.forEach((val) => {
+        const k = val.toLowerCase();
+        if (COLOR_MAP[k]) vals.push(k);
+      })
+    );
+    return Array.from(new Set(vals)).slice(0, 4);
+  }, [product]);
+
+  /* ---------------------------- actions (existing) --------------------------- */
   const addVariantToCart = (selectedVariant: any, quantity: number = 1) => {
     if (isPreOrder) {
-      // Check if regular cart has items
       if (cartItems.length > 0) {
         toast.error("আপনার রেগুলার কার্টে প্রোডাক্ট আছে। প্রি-অর্ডার করতে হলে রেগুলার কার্ট ক্লিয়ার করুন।", {
           description: "চেকআউট পেজে গিয়ে রেগুলার কার্ট ক্লিয়ার করুন।",
@@ -121,12 +192,13 @@ export default function ProductCard({
         });
         return;
       }
-
       const preOrderItem: TPreorderCartItem = {
         _id: selectedVariant._id,
         name: product.name,
         price: priceData.display,
-        image: `${process.env.NEXT_PUBLIC_IMAGE_URL}${selectedVariant.image?.alterImage?.secure_url ?? product.images[0]?.alterImage?.secure_url}`,
+        image: `${process.env.NEXT_PUBLIC_IMAGE_URL}${
+          selectedVariant.image?.alterImage?.secure_url ?? product.images[0]?.alterImage?.secure_url
+        }`,
         quantity,
         maxStock: selectedVariant.variants_stock ?? product.total_stock,
         variantValues: selectedVariant.variants_values ?? [],
@@ -137,88 +209,84 @@ export default function ProductCard({
       };
       addPreorderItem(preOrderItem);
       toast.success("Pre-order item added to cart!");
-    } else {
-      if (preorderItem) {
-        toast.error("আপনার চেকআউটে ইতিমধ্যে একটা প্রি-অর্ডার প্রোডাক্ট আছে!", {
-          description: "চেকআউট ক্লিয়ার করে রেগুলার প্রোডাক্ট যোগ করতে চান?",
-          duration: 10000,
-          action: {
-            label: "চেকআউট ক্লিয়ার করুন",
-            onClick: () => {
-              clearPreorderCart();
-              toast.success("✅ চেকআউট ক্লিয়ার হয়েছে!", {
-                description: "এখন আপনি রেগুলার প্রোডাক্ট কার্টে যোগ করতে পারবেন",
-                duration: 5000,
-              });
-            },
+      return;
+    }
+
+    if (preorderItem) {
+      toast.error("আপনার চেকআউটে ইতিমধ্যে একটা প্রি-অর্ডার প্রোডাক্ট আছে!", {
+        description: "চেকআউট ক্লিয়ার করে রেগুলার প্রোডাক্ট যোগ করতে চান?",
+        duration: 10000,
+        action: {
+          label: "চেকআউট ক্লিয়ার করুন",
+          onClick: () => {
+            clearPreorderCart();
+            toast.success("✅ চেকআউট ক্লিয়ার হয়েছে!", {
+              description: "এখন আপনি রেগুলার প্রোডাক্ট কার্টে যোগ করতে পারবেন",
+              duration: 5000,
+            });
           },
-        });
-        return;
-      }
+        },
+      });
+      return;
+    }
 
-      const hasVariants = product.hasVariants && product.variantsId.length > 0;
-      const cartId = hasVariants ? selectedVariant._id : product.variantsId[0]._id;
-      const cartVariantId = hasVariants ? selectedVariant._id : undefined;
+    const hasVariants = product.hasVariants && product.variantsId.length > 0;
+    const cartId = hasVariants ? selectedVariant._id : product.variantsId[0]._id;
+    const cartVariantId = hasVariants ? selectedVariant._id : undefined;
 
-      const cartItem = {
-        _id: cartId,
-        variantId: cartVariantId,
-        name: product.name,
-        price: priceData.display,
-        image:
-          selectedVariant.image?.alterImage?.secure_url ||
-          product.images?.[0]?.alterImage?.secure_url ||
-          "/placeholder.png",
-        quantity,
-        maxStock: selectedVariant.variants_stock || product.total_stock,
-        variantValues: selectedVariant.variants_values ?? [],
-        variantGroups: product.variantsGroup ?? [],
-        sellingPrice: Number(priceData.sell),
-        currency: product.currency || "BDT",
-        isWithinOffer: priceData.isOffer,
-        ...(selectedVariant.variants_values && selectedVariant.variants_values.length > 0 && {
+    addCartItem({
+      _id: cartId,
+      variantId: cartVariantId,
+      name: product.name,
+      price: priceData.display,
+      image:
+        selectedVariant.image?.alterImage?.secure_url ||
+        product.images?.[0]?.alterImage?.secure_url ||
+        "/placeholder.png",
+      quantity,
+      maxStock: selectedVariant.variants_stock || product.total_stock,
+      variantValues: selectedVariant.variants_values ?? [],
+      variantGroups: product.variantsGroup ?? [],
+      sellingPrice: Number(priceData.sell),
+      currency: product.currency || "BDT",
+      isWithinOffer: priceData.isOffer,
+      ...(selectedVariant.variants_values &&
+        selectedVariant.variants_values.length > 0 && {
           variantLabel: selectedVariant.variants_values.join(" / "),
         }),
-      };
-      addCartItem(cartItem);
-      openCart();
-      toast.success("কার্টে যোগ করা হয়েছে!");
-    }
+    });
+    openCart();
+    toast.success("কার্টে যোগ করা হয়েছে!");
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (isOutOfStock || !variant) {
       toast.error("Out of stock");
       return;
     }
-
     if (product.hasVariants) {
       setModalAction("cart");
       setIsModalOpen(true);
       return;
     }
-
     addVariantToCart(variant);
   };
 
   const handleVariantSelect = (selectedVariant: any, quantity: number) => {
-    if (modalAction === "cart") {
-      addVariantToCart(selectedVariant, quantity);
-    } else if (modalAction === "wishlist") {
+    if (modalAction === "cart") addVariantToCart(selectedVariant, quantity);
+    else if (modalAction === "wishlist") {
       const hasVariants = product.hasVariants && product.variantsId.length > 0;
       const wishlistId = hasVariants ? selectedVariant._id : product._id;
       const wishlistVariantId = hasVariants ? selectedVariant._id : undefined;
 
-      const isAlreadyWishlisted = wishlistItems.some((item) => item._id === wishlistId);
-
-      if (isAlreadyWishlisted) {
+      const already = wishlistItems.some((i) => i._id === wishlistId);
+      if (already) {
         removeWishlistItem(wishlistId);
         toast.success("Removed from wishlist!");
       } else {
-        const wishlistItem = {
+        addWishlistItem({
           _id: wishlistId,
           productId: product._id,
           variantId: wishlistVariantId,
@@ -233,14 +301,11 @@ export default function ProductCard({
             "/placeholder.png",
           variantValues: selectedVariant.variants_values ?? [],
           variantGroups: product.variantsGroup ?? [],
-        };
-
-        addWishlistItem(wishlistItem);
+        });
         toast.success("Added to wishlist!");
       }
       openWishlist();
     }
-
     setIsModalOpen(false);
     setModalAction(null);
   };
@@ -253,12 +318,10 @@ export default function ProductCard({
       toast.error("Pre-order items cannot be added to wishlist");
       return;
     }
-
     if (!variant) {
       toast.error("Unavailable");
       return;
     }
-
     if (product.hasVariants) {
       setModalAction("wishlist");
       setIsModalOpen(true);
@@ -275,7 +338,7 @@ export default function ProductCard({
       const wishlistId = hasVariants ? variant._id : product._id;
       const wishlistVariantId = hasVariants ? variant._id : undefined;
 
-      const wishlistItem = {
+      addWishlistItem({
         _id: wishlistId,
         productId: product._id,
         variantId: wishlistVariantId,
@@ -290,116 +353,174 @@ export default function ProductCard({
           "/placeholder.png",
         variantValues: variant.variants_values ?? [],
         variantGroups: product.variantsGroup ?? [],
-      };
-
-      addWishlistItem(wishlistItem);
+      });
       toast.success("Added to wishlist!");
     }
     openWishlist();
   };
 
-  const img =
-    product.images?.[0]?.alterImage?.secure_url ||
-    product.images?.[0]?.image.secure_url ||
-    "/placeholder.png";
-  const blur =
-    product.images?.[0]?.image.secure_url?.replace(
-      "/upload/",
-      "/upload/e_blur:300/"
-    ) || "/placeholder.png";
-
+  /* --------------------------------- render -------------------------------- */
   return (
     <div
-      className="group relative py-2"
+      className="group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <Link href={productLink} className="block" aria-label={`View ${product.name} details`} prefetch={false}>
+        {/* Outer card */}
+        <div className="relative flex flex-col rounded-[28px] overflow-hidden shadow-sm hover:shadow-lg transition-all border border-slate-100 bg-white">
+          {/* image area */}
+          <div className="relative bg-[#F2F4F7] w-full h-80 sm:h-88 grid place-items-center">
+            {/* sale badge (left-top) */}
+            {/* {priceData.isOffer && (
+              <span className="absolute left-3 top-3 z-20 px-3 py-1.5 rounded-full text-[12px] font-bold text-white shadow-md
+                               bg-gradient-to-r from-indigo-500 to-violet-500">
+                Sale
+              </span>
+            )} */}
 
-      <Link
-        href={productLink}
-        className="block relative"
-        aria-label={`View ${product.name} details`}
-        prefetch={false}
-      >
-        <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-black shadow-sm transition-transform duration-200 hover:-translate-y-0.5">
-          {priceData.isOffer && (
-            <span className="absolute top-3 left-3 z-20 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-              -{priceData.pct}%
+
+
+<div className="absolute top-0 left-0 z-20">
+            <span
+              className={`absolute left-3 top-3 z-20 px-3 py-1.5 rounded-full text-[12px] font-bold text-white shadow-md
+                ${
+                  badges.condition === "hot"
+                    ? "bg-pink-500"
+                    : badges.condition === "best selling"
+                    ? "bg-sky-400"
+                    : badges.condition === "new"
+                    ? "bg-[#5644E6]"
+                    : "bg-gray-400"
+                }`}
+            >
+              {badges.condition
+                ? badges.condition[0].toUpperCase() + badges.condition.slice(1)
+                : "N/A"}
             </span>
-          )}
-          <div className="relative w-full aspect-[3/5] sm:aspect-[3/4] bg-pink-50 dark:bg-black overflow-hidden rounded-xl">
+          </div>
+            {/* right-top: New! text + ghost actions */}
+            <div className="absolute right-3 top-3 z-20 flex flex-col items-center gap-2">
+              {condition?.toLowerCase() === "new" && (
+                <span className="text-xs font-semibold text-slate-500">New!</span>
+              )}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push(productLink);
+                }}
+                className="p-2 rounded-full bg-white/70 backdrop-blur border border-white/60 shadow-sm text-slate-500 hover:text-slate-700 hover:bg-white transition"
+                aria-label="Quick view"
+              >
+                <FiEye className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleWishlistClick}
+                aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                className={`p-2 rounded-full border shadow-sm transition
+                            ${isWishlisted ? "text-rose-500 bg-white" : "text-slate-500 bg-white/70 hover:text-rose-500"}
+                            border-white/60 backdrop-blur`}
+              >
+                <FiHeart className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* product image */}
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${img}`}
               alt={product.name}
               fill
               priority={isAboveFold}
-              className={`transition-transform duration-500 ${isHovered ? "scale-[1.3] rotate-1" : "scale-100"}`}
-              sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 20vw"
+              className={`object-contain transition-transform duration-500 ${isHovered ? "scale-[1.04]" : "scale-100"}`}
+              sizes="(max-width:640px) 80vw, (max-width:1024px) 40vw, 320px"
               placeholder="blur"
               blurDataURL={blur}
               fallbackSrc="/assets/falback.jpg"
-              objectFit="cover"
             />
-            <button
-              type="button"
-              onClick={handleWishlistClick}
-              aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-              className={`absolute top-2 right-2 p-2 rounded-full border ${isWishlisted
-                ? "border-red-500 bg-red-50 dark:bg-red-900/30 text-red-500"
-                : "border-pink-200 bg-white dark:bg-gray-700 text-[#C43882]"
-                } hover:shadow-md z-10 transition-colors ${isPreOrder ? "cursor-not-allowed opacity-50" : ""}`}
-              title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-              disabled={isPreOrder}
-            >
-              <FiHeart className={`w-5 h-5 ${isWishlisted ? "fill-current" : ""}`} />
-            </button>
 
+            {/* big rounded 'Add to cart' inside image bottom */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-5 grid place-items-center">
+              <button
+  onClick={handleAddToCart}
+  disabled={isOutOfStock}
+  className={`pointer-events-auto w-[75%] sm:w-4/5 text-center rounded-2xl py-3 font-semibold shadow-md
+             ${isOutOfStock
+               ? "bg-violet-200 text-white/80 cursor-not-allowed"
+               : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500"}
+             transition opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0`}
+>
+  Add To Cart +
+</button>
+            </div>
           </div>
-          <div className="p-3 sm:p-4 bg-pink-50/40 dark:bg-black">
-            <h3 className="text-[15px] font-semibold text-gray-900 dark:text-white line-clamp-1">
+
+          {/* details area */}
+          <div className="px-3 sm:px-4 pt-3 pb-4">
+            {/* title */}
+            <h3 className="text-[15px] sm:text-[16px] font-semibold text-slate-800 hover:text-indigo-600 transition line-clamp-2">
               {product.name}
             </h3>
-            <div className="flex justify-between items-baseline">
-              <span className="md:text-xl text-[14px] font-semibold text-primary">
-                {"৳"}{priceData.display.toFixed()}
+
+            {/* price + crossed old price + rating */}
+            <div className="mt-1 flex items-center gap-2 flex-wrap">
+              <span className="text-[18px] sm:text-[20px] font-extrabold text-indigo-600">
+                ৳{priceData.display.toFixed()}
               </span>
               {priceData.isOffer && (
-                <span className="line-through text-gray-400 md:text-xl">
-                  {"৳"}{priceData.sell.toFixed()}
-
+                <span className="text-slate-400 line-through text-[13px] sm:text-[14px]">
+                  ৳{priceData.sell.toFixed()}
                 </span>
+              )}
+
+              {/* rating chip (if available) */}
+              {(product as any)?.ratingAvg ? (
+                <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600 text-[12px] font-semibold">
+                  <FiStar className="w-3.5 h-3.5" />
+                  {(product as any).ratingAvg.toFixed(1)}
+                </span>
+              ) : null}
+              {(product as any)?.reviewsCount ? (
+                <span className="text-slate-500 text-[12px]">({(product as any).reviewsCount})</span>
+              ) : null}
+            </div>
+
+            {/* size chips + color dots */}
+            <div className="mt-2 flex items-center justify-between">
+              <div className="flex gap-1.5">
+                {sizes.slice(0, 3).map((s) => (
+                  <span
+                    key={s}
+                    className="px-2 py-0.5 rounded-md border text-[12px] font-semibold text-slate-700 border-slate-200"
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
+              {colors.length > 0 && (
+                <div className="flex items-center gap-2">
+                  {colors.slice(0, 3).map((c) => (
+                    <span
+                      key={c}
+                      className="inline-block w-3.5 h-3.5 rounded-full border border-slate-200"
+                      style={{ backgroundColor: COLOR_MAP[c] }}
+                      aria-label={c}
+                      title={c}
+                    />
+                  ))}
+                </div>
               )}
             </div>
           </div>
-          <div className="flex items-center justify-between gap-2 px-1 py-1 w-full">
-            <button
-              onClick={handleAddToCart}
-              disabled={isOutOfStock}
-              className={`inline-block text-white font-bold rounded-lg text-xs md:text-lg p-1 md:p-2 hover:shadow-md disabled:opacity-60  text-nowrap ${isPreOrder
-                ? "bg-gradient-to-r from-orange-500 to-red-500"
-                : "bg-primary dark:bg-primary"
-                }`}
-            >
-              {isPreOrder ? "প্রি-অর্ডার করুন" : "অর্ডার করুন"}
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsQuickViewOpen(true);
-              }}
-              className="inline-block text-[#C43882] border border-[#C43882] text-xs md:text-lg p-1 md:p-2 font-bold rounded-lg hover:bg-[#C43882] hover:text-white transition-colors text-nowrap"
-            >
-              Quick View
-            </button>
-          </div>
         </div>
       </Link>
+
+      {/* Variant modal (existing logic kept) */}
       {product.variantsId && (
         <VariantSelectModal
           isOpen={isModalOpen}
           variants={product.variantsId}
-          onSelect={handleVariantSelect}
+          onSelect={(v, qty) => handleVariantSelect(v, qty ?? 1)}
           onClose={() => {
             setIsModalOpen(false);
             setModalAction(null);
@@ -409,13 +530,6 @@ export default function ProductCard({
           variantsGroup={product.variantsGroup}
         />
       )}
-
-      {/* Quick View Modal */}
-      <QuickViewModal
-        product={product}
-        isOpen={isQuickViewOpen}
-        onClose={() => setIsQuickViewOpen(false)}
-      />
     </div>
   );
 }

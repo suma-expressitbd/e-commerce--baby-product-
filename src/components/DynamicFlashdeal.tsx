@@ -20,6 +20,7 @@ import { Product } from '@/types/product';
 import ProductCard from '@/components/ui/organisms/product-card';
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi2';
 import { FlashDealTimeCounter } from './ui/atoms/FlashDealTimeCounter';
+import ProductCard1 from './ui/organisms/product-card1';
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -229,81 +230,47 @@ function FlashDeals({ initialProducts }: FlashDealsProps) {
 
   /* ───────── JSX ───────── */
   return (
-    <div className="py-4 space-y-6">
-      <section className="group/section py-4">
+    <div className="py-4 space-y-6 ">
+    <section className="group/section py-4 min-h-[720px] md:min-h-[780px] mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 container mx-auto">
           <div className="col-span-12 relative md:px-4">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary dark:text-gray-100 capitalize flex items-center justify-between">
+          {/* <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 md:mb-12">
               Flash Deals
-              {/* Custom Swiper Nav Buttons */}
-              <div className="flex gap-2 ml-4">
-                {showNav.prev && (
-                  <div
-                    ref={prevRef}
-                    className="p-2 rounded-full bg-secondary dark:bg-primary shadow dark:hover:bg-pink-100 hover:bg-pink-50 transition"
-                  >
-                    <HiOutlineChevronLeft className="h-5 w-5 text-gray-700" />
-                  </div>
-                )}
-                {showNav.next && (
-                  <div
-                    ref={nextRef}
-                    className="p-2 rounded-full bg-secondary dark:bg-primary shadow hover:bg-pink-50 dark:hover:bg-pink-100 transition"
-                  >
-                    <HiOutlineChevronRight className="h-5 w-5 text-gray-700" />
-                  </div>
-                )}
+            </h2>   */}
 
-                <button
-                  onClick={() => router.push('/flashdeals')}
-                  className="px-2 py-2 text-sm bg-secondary dark:bg-primary text-gray-700 rounded shadow hover:bg-pink-50 dark:hover:bg-pink-100 transition"
-                >
-                  See More
-                </button>
-              </div>
-            </h2>
+        <div className="flex flex-col gap-2">
+       <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary"> 
+        Flash Deals 
+       </h2> 
+ 
+      <div>
+  <Swiper
+    modules={[Navigation, Autoplay, FreeMode, Pagination, EffectCoverflow]}
+    spaceBetween={50}
+    slidesPerView={'auto'}      // ← পরিবর্তন
+    centeredSlides={false}
+    navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
+    autoplay={!isAutoplayPaused ? { delay: 4000 } : false}
+    onSwiper={setSwiper}
+    onSlideChange={updateNav}
+    className="py-8 overflow-visible h-[720px] md:h-[780px]"
+  >
+    {deals.map((deal) => (
+     <SwiperSlide
+      key={deal._id}
+    
+    className="!w-[720px] md:!w-[800px] lg:!w-[800px] !h-full"
+    >
+  
+     <div className="h-full flex">
+       <ProductCard1 product={deal} isAboveFold={false} />
+     </div>
+    </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
+</div>
 
-            <div className="mt-4">
-              <Swiper
-                modules={[Navigation, Autoplay, FreeMode, Pagination, EffectCoverflow]}
-                spaceBetween={16}
-                slidesPerView={2}
-                breakpoints={{
-                  768: {
-                    slidesPerView: 3,
-                  },
-                  1024: {
-                    slidesPerView: 4,
-                  },
-                }}
-                navigation={{
-                  prevEl: prevRef.current,
-                  nextEl: nextRef.current,
-                }}
-                loop={false}
-                autoplay={!isAutoplayPaused ? { delay: 4000 } : false}
-                onSwiper={setSwiper}
-                onSlideChange={updateNav}
-                className="py-8"
-              >
-                {deals.map((deal) => (
-                  <SwiperSlide key={deal._id} className="relative">
-                    <div className="transform  transition-transform relative">
-                      <div
-                        className="
-                        flex absolute bottom-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 items-center justify-center
-                         
-                          z-10
-                        "
-                      >
-                        <FlashDealTimeCounter endDate={deal.variantsId?.[0]?.discount_end_date ?? ''} />
-                      </div>
-                      <ProductCard product={deal} isAboveFold={false} />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
           </div>
         </div>
       </section>

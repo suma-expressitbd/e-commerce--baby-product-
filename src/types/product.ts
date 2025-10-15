@@ -10,6 +10,9 @@ export interface ProductResponse {
 }
 
 export interface Product {
+  reviewsCount: number;
+  rating: any;
+  rating: any;
   _id: string;
   name: string;
   short_description: string;
@@ -99,6 +102,7 @@ export interface Variant {
 }
 
 export interface VariantGroup {
+  name: any;
   variantName: string;
   variantValue: string[];
 }

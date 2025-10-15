@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useGetProductsQuery } from "@/lib/api/publicApi";
 import ProductCardSkeleton from "./ui/skeleton/ProductCardSkeleton";
 import ProductCard from "./ui/organisms/product-card";
+import ProductCard1 from "./ui/organisms/product-card1";
 
 const DynamicCategorySections = ({ initialProducts }: { initialProducts?: Product[] }) => {
     const [isVisible, setIsVisible] = useState(false);

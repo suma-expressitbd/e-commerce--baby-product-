@@ -5,7 +5,7 @@ import React from "react";
 
 export default function ServicePolicyStrip({ className = "" }: { className?: string }) {
   return (
-    <section className={`w-full bg-tertiary dark:bg-gray-400 ${className}`}>
+    <section className={`w-full bg-tertiary dark:bg-gray-400  ${className}`}>
       <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-6 text-xs sm:text-sm md:text-base text-black ">
         {/* 1 */}
         <div>

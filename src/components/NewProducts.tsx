@@ -13,6 +13,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import 'swiper/css/autoplay';
 import Link from 'next/link';
+import ProductCard1 from './ui/organisms/product-card1';
+import { BiSolidLeftArrow, BiSolidRightArrow } from 'react-icons/bi';
+import { PiDressFill } from 'react-icons/pi';
 
 interface NewProductsSlideProps {
     initialProducts: Product[];
@@ -127,175 +130,172 @@ export default function NewProductsSlide({
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="absolute inset-0 bg-gradient-to-b from-green-50/30 via-transparent to-green-50/20 dark:from-green-900/10 dark:via-transparent dark:to-green-900/5 pointer-events-none" />
-            <div className="relative px-3 py-6 sm:px-4 sm:py-8 md:px-6 md:py-10 lg:px-8 lg:py-12 max-w-8xl mx-auto">
+            <div className="container mx-auto">{/* ⬅️ UPDATED */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">{/* ⬅️ UPDATED */}
+        <div className="col-span-12 relative md:px-4 py-6 sm:py-8 md:py-10 lg:py-12">{/* ⬅️ UPDATED */}
+
                 <motion.div
                     className="relative mb-8 md:mb-12"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                    <div className="flex flex-row items-center justify-between">
-                        <div className="relative text-left">
-                            <div className="absolute -top-4 left-0">
-                                <div className="flex items-center gap-1">
-                                    <StarIcon className="w-3 h-3 text-yellow-400 opacity-60" />
-                                    <StarIcon className="w-4 h-4 text-yellow-500" />
-                                    <StarIcon className="w-3 h-3 text-yellow-400 opacity-60" />
-                                </div>
-                            </div>
-                            <motion.h1
-                                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight mb-2"
-                                initial={{ scale: 0.9 }}
-                                animate={{ scale: 1 }}
-                                transition={{ duration: 0.5, delay: 0.3 }}
-                            >
-                                <span className="bg-clip-text text-transparent bg-primary">New Arrivals</span>
-                            </motion.h1>
-                            <motion.p
-                                className="text-sm text-black dark:text-gray-300 mb-4 max-w-2xl hidden md:block"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5, delay: 0.4 }}
-                            >
-                                Discover our latest collection of premium products
-                            </motion.p>
-                            <motion.div
-                                className="relative"
-                                initial={{ scaleX: 0 }}
-                                animate={{ scaleX: 1 }}
-                                transition={{ duration: 0.8, delay: 0.5 }}
-                            >
-                                <div className="h-1 bg-gradient-to-r from-primary to-transparent w-32 sm:w-48 md:w-64 lg:w-80 rounded-full" />
-                                <div className="h-0.5 bg-gradient-to-r from-primary to-transparent w-24 sm:w-36 md:w-48 lg:w-60 rounded-full -mt-0.5" />
-                            </motion.div>
-                        </div>
-                        <motion.div
-                            className=""
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.6 }}
-                        >
-                            <Link
-                                href="/products/new"
-                                className="md:px-6 px-2 md:py-3 py-1 bg-transparent border-2 border-primary text-primary dark:text-primary font-medium rounded-full hover:bg-pink-100 dark:hover:bg-pink-100 transition-colors"
-                            >
-                                See More
-                            </Link>
-                        </motion.div>
+                    <div className="">
+
+                        
+                       <motion.div
+  className="relative   mt-0 md:mt-8 mb-8 md:mb-12"
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.2 }}
+>
+  {/* পুরো হেডারকে center align */}
+  <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center">
+    <motion.h2
+      className="flex items-center gap-2 text-[28px] sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0B2A4B]"
+      initial={{ scale: 0.95 }}
+      animate={{ scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+    >
+      <span>New Products</span>
+      <PiDressFill className="w-6 h-6 sm:w-7 sm:h-7 text-gradient-to-tr from-[#9B77DC] via-[#D090CD] to-[#DF8BB0]  " />
+    </motion.h2>
+
+    <motion.p
+      className="mt-2 text-xs sm:text-sm md:text-base text-slate-500"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+    >
+      Our Colors Matching Your Different Moods.
+    </motion.p>
+
+    {/* optional underline */}
+    <div className="mt-3 h-[2px] w-24 sm:w-32 rounded-full bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
+  </div>
+</motion.div>
+                       
+
+                       
                     </div>
+
+
                 </motion.div>
                 <div className="relative group">
-                    {newProducts.length > 0 ? (
-                        <>
-                            <Swiper
-                                modules={[Navigation, FreeMode, Autoplay]}
-                                spaceBetween={16}
-                                slidesPerView={1}
-                                freeMode={{
-                                    enabled: true,
-                                    sticky: false,
-                                    momentumRatio: 0.25,
-                                }}
-                                autoplay={
-                                    autoplay
-                                        ? {
-                                            delay: typeof autoplay === 'object' ? autoplay.delay : 3000,
-                                            disableOnInteraction: false,
-                                            pauseOnMouseEnter: true,
-                                        }
-                                        : false
-                                }
-                                navigation={{
-                                    nextEl: `#${componentId}-next`,
-                                    prevEl: `#${componentId}-prev`,
-                                }}
-                                onSwiper={(swiper: SwiperType) => {
-                                    if (isDev) console.log('Swiper initialized');
-                                    setSwiperInstance(swiper);
-                                    setTimeout(() => checkNavButtons(), 100);
-                                }}
-                                onSlideChange={checkNavButtons}
-                                breakpoints={{
-                                    0: { slidesPerView: 1.2, spaceBetween: 8, centeredSlides: false },
-                                    320: { slidesPerView: 1.5, spaceBetween: 10, centeredSlides: false },
-                                    480: { slidesPerView: 2, spaceBetween: 12, centeredSlides: false },
-                                    640: { slidesPerView: 2.5, spaceBetween: 14, centeredSlides: false },
-                                    768: { slidesPerView: 3, spaceBetween: 16, centeredSlides: false },
-                                    1024: { slidesPerView: 4, spaceBetween: 18, centeredSlides: false },
-                                    1280: { slidesPerView: 5, spaceBetween: 20, centeredSlides: false },
-                                    1536: { slidesPerView: 5, spaceBetween: 24, centeredSlides: false },
-                                }}
-                                className={`${componentId}-swiper pb-4`}
-                            >
-                                <AnimatePresence mode="popLayout">
-                                    {newProducts.map((product, index) => (
-                                        <SwiperSlide key={`${componentId}-product-${product._id}-${index}`}>
-                                            <motion.div
-                                                layout
-                                                initial={{ opacity: 0, scale: 0.8, y: 30, rotateY: -15 }}
-                                                animate={{ opacity: 1, scale: 1, y: 0, rotateY: 0 }}
-                                                exit={{ opacity: 0, scale: 0.8, y: -30, rotateY: 15 }}
-                                                whileHover={{
-                                                    y: -8,
-                                                    scale: 1.02,
-                                                    rotateY: 2,
-                                                    transition: { duration: 0.2 },
-                                                }}
-                                                transition={{
-                                                    duration: 0.4,
-                                                    delay: Math.min(index * 0.05, 0.8),
-                                                    ease: [0.25, 0.46, 0.45, 0.94],
-                                                }}
-                                                className="w-full h-full"
-                                            >
-                                                <div className="relative">
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-pink-400/20 to-pink-400/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-                                                    <ProductCard product={product} isAboveFold={index < 6} />
-                                                </div>
-                                            </motion.div>
-                                        </SwiperSlide>
-                                    ))}
-                                </AnimatePresence>
-                            </Swiper>
-                            <AnimatePresence>
-                                {showNavButtons.prev && (
-                                    <motion.div
-                                        id={`${componentId}-prev`}
-                                        onClick={handlePrevClick}
-                                        className="absolute left-0 sm:-left-2 md:-left-4 top-1/2 -translate-y-1/2 z-30 group/nav cursor-pointer select-none"
-                                        initial={{ opacity: 0, x: -20, scale: 0.8 }}
-                                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                                        exit={{ opacity: 0, x: -20, scale: 0.8 }}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        style={{ top: '40%', transform: 'translateY(-50%)' }} // Ensure centering
-                                    >
-                                        <div className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:bg-white dark:hover:bg-gray-800">
-                                            <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-700 dark:text-gray-200 group-hover/nav:text-pink-600 dark:group-hover/nav:text-pink-400 transition-colors duration-200" />
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                            <AnimatePresence>
-                                {showNavButtons.next && (
-                                    <motion.div
-                                        id={`${componentId}-next`}
-                                        onClick={handleNextClick}
-                                        className="absolute right-0 sm:-right-2 md:-right-4 top-1/2 -translate-y-1/2 z-30 group/nav cursor-pointer select-none"
-                                        initial={{ opacity: 0, x: 20, scale: 0.8 }}
-                                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                                        exit={{ opacity: 0, x: 20, scale: 0.8 }}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        style={{ top: '40%', transform: 'translateY(-50%)' }} // Ensure centering
-                                    >
-                                        <div className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:bg-white dark:hover:bg-gray-800">
-                                            <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-700 dark:text-gray-200 group-hover/nav:text-pink-600 dark:group-hover/nav:text-pink-400 transition-colors duration-200" />
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </>
+  {newProducts.length > 0 ? (
+    <>
+      <Swiper
+        modules={[Navigation, FreeMode, Autoplay]}
+        spaceBetween={16}
+        slidesPerView={1}
+        freeMode={{ enabled: true, sticky: false, momentumRatio: 0.25 }}
+        autoplay={
+          autoplay
+            ? {
+                delay: typeof autoplay === "object" ? autoplay.delay : 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
+            : false
+        }
+        navigation={{
+          nextEl: `#${componentId}-next`,
+          prevEl: `#${componentId}-prev`,
+        }}
+        onSwiper={(swiper: SwiperType) => {
+          if (isDev) console.log("Swiper initialized");
+          setSwiperInstance(swiper);
+          setTimeout(() => checkNavButtons(), 100);
+        }}
+        onSlideChange={checkNavButtons}
+        breakpoints={{
+          0: { slidesPerView: 1.2, spaceBetween: 8, centeredSlides: false },
+          320: { slidesPerView: 1.5, spaceBetween: 10, centeredSlides: false },
+          480: { slidesPerView: 2, spaceBetween: 12, centeredSlides: false },
+          640: { slidesPerView: 2.5, spaceBetween: 14, centeredSlides: false },
+          768: { slidesPerView: 3, spaceBetween: 16, centeredSlides: false },
+          1024: { slidesPerView: 4, spaceBetween: 18, centeredSlides: false },
+          1280: { slidesPerView: 5, spaceBetween: 20, centeredSlides: false },
+          1536: { slidesPerView: 5, spaceBetween: 24, centeredSlides: false },
+        }}
+        className={`${componentId}-swiper pb-24 sm:pb-28 md:pb-32`} // ⬅️ UPDATED (নিচে জায়গা রাখতে)
+      >
+        <AnimatePresence mode="popLayout">
+          {newProducts.map((product, index) => (
+            <SwiperSlide key={`${componentId}-product-${product._id}-${index}`}>
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.8, y: 30, rotateY: -15 }}
+                animate={{ opacity: 1, scale: 1, y: 0, rotateY: 0 }}
+                exit={{ opacity: 0, scale: 0.8, y: -30, rotateY: 15 }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  rotateY: 2,
+                  transition: { duration: 0.2 },
+                }}
+                transition={{
+                  duration: 0.4,
+                  delay: Math.min(index * 0.05, 0.8),
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                className="w-full h-full"
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-pink-400/20 to-pink-400/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+                  <ProductCard product={product} isAboveFold={index < 6} />
+                </div>
+              </motion.div>
+            </SwiperSlide>
+          ))}
+        </AnimatePresence>
+      </Swiper>
+
+
+      {/* ⬇️ NAV BUTTONS: bottom-center container */}
+      <div  className="absolute inset-x-0 bottom-0 translate-y-6 sm:translate-y-8 md:translate-y-10
+             flex items-center justify-center gap-3 z-30"
+> {/* ⬅️ UPDATED */}
+        <AnimatePresence>
+          {showNavButtons.prev && (
+            <motion.div
+            key="prev"  
+              id={`${componentId}-prev`} // Swiper nav target অপরিবর্তিত
+              onClick={handlePrevClick}
+              initial={{ opacity: 0, y: 10, scale: 0.9 }} // ⬅️ UPDATED
+              animate={{ opacity: 1, y: 0, scale: 1 }}     // ⬅️ UPDATED
+              exit={{ opacity: 0, y: 10, scale: 0.9 }}     // ⬅️ UPDATED
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.96 }}
+              className="group/nav cursor-pointer select-none"
+            >
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/95 dark:bg-gray-800/95 border border-gray-200/60 dark:border-gray-700/60 shadow-md hover:shadow-lg transition">
+              <BiSolidLeftArrow className="w-4 h-4 text-gray-700 dark:text-gray-200" />
+              </div>
+            </motion.div>
+          )}
+
+          {showNavButtons.next && (
+            <motion.div
+            key="next"  
+              id={`${componentId}-next`} // Swiper nav target অপরিবর্তিত
+              onClick={handleNextClick}
+              initial={{ opacity: 0, y: 10, scale: 0.9 }} // ⬅️ UPDATED
+              animate={{ opacity: 1, y: 0, scale: 1 }}     // ⬅️ UPDATED
+              exit={{ opacity: 0, y: 10, scale: 0.9 }}     // ⬅️ UPDATED
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.96 }}
+              className="group/nav cursor-pointer select-none"
+            >
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/95 text-white shadow-md hover:shadow-lg transition"> {/* ⬅️ UPDATED (ডান বাটন সলিড) */}
+                  <BiSolidRightArrow className="w-4 h-4 text-gray-700 dark:text-gray-200" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      {/* ⬆️ NAV BUTTONS END */}
+    </>
                     ) : (
                         <motion.div
                             className="text-center py-16 md:py-24"
@@ -356,6 +356,9 @@ export default function NewProductsSlide({
                     )}
                 </div>
             </div>
+             </div>{/* col-span-12 */}
+      </div>{/* grid */}
+    
         </motion.section>
     );
 }

@@ -10,6 +10,9 @@ import ScrollToTopButton from "@/components/ui/molecules/ScrollToTopButton";
 import DurgaPujaBanner from "@/components/DurgaPujaBanner";
 import DynamicFlashdeal from "@/components/DynamicFlashdeal";
 import BannerSlider from "@/components/BannerSlider";
+import CategorySlider from "@/components/CategorySlider";
+import HeroShowcase from "@/components/HeroShowcase";
+import FeaturesBar from "@/components/FeaturesBar";
 
 // Lazy load heavy components to improve initial page load
 const ClientAllProducts = lazy(() => import("@/components/ClientAllProducts"));
@@ -97,31 +100,18 @@ export default async function LandingPage({
       {/* <DurgaPujaBanner /> */}
       <BannerSlider/>
 
+          <CategorySlider />
+
       {/* <HeroSection /> */}
       <ClientNewProducts initialProducts={initialProducts} />
-      <DynamicFlashdeal initialProducts={initialProducts} />
-      {/* Products Section - Critical content */}
-      <div className="mt-0 md:mt-0 mb-0">
-        <Suspense fallback={<ProductsGridSkeleton />}>
-          <ClientAllProducts initialProducts={initialProducts} />
-        </Suspense>
-      </div>
 
-      {/* Video Section - Lowest priority, load last */}
-      <Suspense
-        fallback={
-          <div className="h-64 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">
-            <div className="text-gray-500">Loading content...</div>
-          </div>
-        }
-      >
-        <ProductVideosSlider products={initialProducts} />
-      </Suspense>
-      {/* Category Sections - Load next priority */}
-      <Suspense fallback={<div className="h-32 bg-gray-50 animate-pulse rounded-lg"></div>}>
-        <DynamicCategorySections initialProducts={initialProducts} />
-      </Suspense>
-      {/* Footer content - Always visible */}
+
+     <HeroShowcase/>
+     <FeaturesBar/>
+
+
+      <DynamicFlashdeal initialProducts={initialProducts} />
+      
       <ServicePolicyStrip />
 
       {/* Scroll to Top Button */}
